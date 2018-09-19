@@ -18,25 +18,43 @@
 
 namespace org.nveyancer.network
 
-participant SampleParticipant identified by participantId {
-  o String participantId
-  o String firstName
-  o String lastName
+abstract participant BaseParticipant identified by email {
+  o String email
+  o String name
+  o Address address
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  --> SampleParticipant owner
-  o String value
+concept Address {
+  o String country
+  o String state
+  o String zip
+  o String city optional
+  o String street optional
 }
 
-transaction SampleTransaction {
-  --> SampleAsset asset
-  o String newValue
+participant Conveyancer extends BaseParticipant {
 }
 
-event SampleEvent {
-  --> SampleAsset asset
-  o String oldValue
-  o String newValue
+participant Govenance extends BaseParticipant {
+}
+
+asset BankAccount identified by id {
+  o String id
+  o Integer bsb
+  o Integer accountNumber
+  --> Conveyancer owner
+}
+
+transaction UpdateBankAccountTransaction {
+  --> BankAccount bankAccount
+  o Integer bsb
+  o Integer accountNumber
+}
+
+event BankAccountUpdatedEvent {
+  --> BankAccount bankAccount
+  o Integer oldBsb
+  o Integer oldAccountNumber
+  o Integer newBsb
+  o Integer newAccountNumber
 }

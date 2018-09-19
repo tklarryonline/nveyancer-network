@@ -13,31 +13,15 @@
  */
 
 /**
- * Sample access control list.
+ * Access control list.
  */
-rule EverybodyCanReadEverything {
-    description: "Allow all participants read access to all resources"
-    participant: "org.nveyancer.network.SampleParticipant"
-    operation: READ
-    resource: "org.nveyancer.network.*"
-    action: ALLOW
-}
 
-rule EverybodyCanSubmitTransactions {
-    description: "Allow all participants to submit transactions"
-    participant: "org.nveyancer.network.SampleParticipant"
-    operation: CREATE
-    resource: "org.nveyancer.network.SampleTransaction"
-    action: ALLOW
-}
-
-rule OwnerHasFullAccessToTheirAssets {
-    description: "Allow all participants full access to their assets"
-    participant(p): "org.nveyancer.network.SampleParticipant"
-    operation: ALL
-    resource(r): "org.nveyancer.network.SampleAsset"
-    condition: (r.owner.getIdentifier() === p.getIdentifier())
-    action: ALLOW
+rule Default {
+  description: "Allow all participants access to ALL resources"
+  participant: "ANY"
+  operation: ALL
+  resource: "org.nveyancer.network.*"
+  action: ALLOW
 }
 
 rule SystemACL {
@@ -49,17 +33,17 @@ rule SystemACL {
 }
 
 rule NetworkAdminUser {
-    description: "Grant business network administrators full access to user resources"
-    participant: "org.hyperledger.composer.system.NetworkAdmin"
-    operation: ALL
-    resource: "**"
-    action: ALLOW
+  description: "Grant business network administrators full access to user resources"
+  participant: "org.hyperledger.composer.system.NetworkAdmin"
+  operation: ALL
+  resource: "**"
+  action: ALLOW
 }
 
 rule NetworkAdminSystem {
-    description: "Grant business network administrators full access to system resources"
-    participant: "org.hyperledger.composer.system.NetworkAdmin"
-    operation: ALL
-    resource: "org.hyperledger.composer.system.**"
-    action: ALLOW
+  description: "Grant business network administrators full access to system resources"
+  participant: "org.hyperledger.composer.system.NetworkAdmin"
+  operation: ALL
+  resource: "org.hyperledger.composer.system.**"
+  action: ALLOW
 }
