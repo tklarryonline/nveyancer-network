@@ -18,6 +18,9 @@
 
 namespace org.nveyancer.network
 
+/**
+ * Participants
+ */
 abstract participant BaseParticipant identified by email {
   o String email
   o String name
@@ -33,10 +36,21 @@ concept Address {
 }
 
 participant Conveyancer extends BaseParticipant {
+  o String licenceNumber
 }
 
-participant Govenance extends BaseParticipant {
+participant Governance extends BaseParticipant {
 }
+
+participant FinancialInstitution identified by id {
+  o String id
+  o String name
+  o Address address
+}
+
+/**
+ * Assets
+ */
 
 asset BankAccount identified by id {
   o String id
@@ -45,16 +59,65 @@ asset BankAccount identified by id {
   --> Conveyancer owner
 }
 
-transaction UpdateBankAccountTransaction {
-  --> BankAccount bankAccount
-  o Integer bsb
-  o Integer accountNumber
+asset TrustAccount identified by id {
+  o String id
+  --> Conveyancer owner
+  --> FinancialInstitution institution
+  o String name
+  o String bsb regex=/^[0-9]{6}$/
+  o String accountNumber regex=/^[0-9]{8,9}$/
+  o Boolean isVerified default=false
 }
 
-event BankAccountUpdatedEvent {
-  --> BankAccount bankAccount
-  o Integer oldBsb
-  o Integer oldAccountNumber
-  o Integer newBsb
-  o Integer newAccountNumber
+asset OpenTrustAccountNoticeForm identified by id {
+  o String id
+  --> Conveyancer conveyancer
+  --> FinancialInstitution institution
+  --> Governance officer optional
+  --> TrustAccount trustAccount
+  o DateTime ownerSignedDate
+  o Boolean isInstitutionEndorsed default=false
+  o DateTime institutionSignedDate optional
+  o Boolean isApproved default=false
+  o DateTime approvalDate optional
+}
+
+/**
+ * Transactions
+ */
+abstract transaction BaseTrustAccountTransaction {
+  --> OpenTrustAccountNoticeForm form
+}
+
+transaction OpenTrustAccountTransaction {
+  --> Conveyancer conveyancer
+  --> FinancialInstitution institution
+  o String trustAccountName
+  o String bsb regex=/^[0-9]{6}$/
+  o String accountNumber regex=/^[0-9]{8,9}$/
+}
+
+transaction EndorseTrustAccountTransaction extends BaseTrustAccountTransaction {
+  o Boolean endorse default=true
+}
+
+transaction ApproveTrustAccountTransaction extends BaseTrustAccountTransaction {
+  --> Governance officer
+  o Boolean approve default=true
+}
+
+/**
+ * Events
+ */
+abstract event BaseTrustAccountEvent {
+  --> OpenTrustAccountNoticeForm form
+}
+
+event TrustAccountOpenedEvent extends BaseTrustAccountEvent {
+}
+
+event TrustAccountEndorsedEvent extends BaseTrustAccountEvent {
+}
+
+event TrustAccountApprovedEvent extends BaseTrustAccountEvent {
 }
