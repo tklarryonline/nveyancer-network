@@ -14,23 +14,23 @@ cd dist
 composer archive create --sourceType dir --sourceName ../
 ```
 
-This command will create a `nveyancer-network@version.bna` file in the `dist/` directory.
+This command will create a `nveyancer-network@VERSION.bna` file in the `dist/` directory.
 
 ### Deploy BNA file
 
 Go back to the main folder `nveyancer-network`, then use this command to install the generated
-BNA file.
+BNA file. Change the `VERSION` to the current version of the network.
 
 ```sh
 # Install the generated BNA file
 composer network install \
 --card "PeerAdmin@hlfv1" \
---archiveFile dist/nveyancer-network@0.0.1.bna
+--archiveFile dist/nveyancer-network@VERSION.bna
 
 # Start the network
 composer network start \
 --networkName "nveyancer-network" \
---networkVersion 0.0.1 \
+--networkVersion VERSION \
 --networkAdmin admin \
 --networkAdminEnrollSecret adminpw \
 --card PeerAdmin@hlfv1 \
@@ -71,4 +71,31 @@ Adding schemas for all types to Loopback ...
 Added schemas for all types to Loopback
 Web server listening at: http://localhost:3000
 Browse your REST API at http://localhost:3000/explorer
+```
+
+### Upgrade the business network
+
+When the business model (CTO files) is updated, the current deployed business network
+needs to be upgraded to apply the new changes (even local networks). The steps are as follow:
+
+1. Pump the version number of the network in `package.json` file.
+2. Use the commands in [this section](#generate-business-network-archive-bna-file) to
+generate new BNA file.
+3. Install and upgrade to the business network
+
+```sh
+# Install the generated BNA file in step 2
+composer network install \
+--card "PeerAdmin@hlfv1" \
+--archiveFile dist/nveyancer-network@VERSION.bna
+
+# Upgrade the current network
+# Change the VERSION to the current version
+composer network upgrade \
+--card "PeerAdmin@hlfv1" \
+--networkName "nveyancer-network" \
+--networkVersion VERSION
+
+# Regenerate the REST server
+composer-rest-server -c admin@nveyancer-network -n never -w true
 ```

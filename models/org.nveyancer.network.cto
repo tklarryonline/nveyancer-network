@@ -93,8 +93,8 @@ transaction OpenTrustAccountTransaction {
   --> Conveyancer conveyancer
   --> FinancialInstitution institution
   o String trustAccountName
-  o String bsb regex=/^[0-9]{6}$/
-  o String accountNumber regex=/^[0-9]{8,9}$/
+  o String bsb default='000000' regex=/^[0-9]{6}$/
+  o String accountNumber default='00000000' regex=/^[0-9]{8,9}$/
 }
 
 transaction EndorseTrustAccountTransaction extends BaseTrustAccountTransaction {
@@ -104,6 +104,9 @@ transaction EndorseTrustAccountTransaction extends BaseTrustAccountTransaction {
 transaction ApproveTrustAccountTransaction extends BaseTrustAccountTransaction {
   --> Governance officer
   o Boolean approve default=true
+}
+
+transaction GenerateTestData {
 }
 
 /**
