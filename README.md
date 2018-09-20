@@ -12,6 +12,7 @@ Generate the business network archive to deploy and test on Composer Playground.
 # Make sure that you're in the 'nveyancer-network' directory
 cd dist
 composer archive create --sourceType dir --sourceName ../
+cd ..
 ```
 
 This command will create a `nveyancer-network@VERSION.bna` file in the `dist/` directory.
@@ -87,15 +88,14 @@ generate new BNA file.
 # Install the generated BNA file in step 2
 composer network install \
 --card "PeerAdmin@hlfv1" \
---archiveFile dist/nveyancer-network@VERSION.bna
+--archiveFile dist/nveyancer-network@0.0.3a.bna
 
 # Upgrade the current network
 # Change the VERSION to the current version
 composer network upgrade \
 --card "PeerAdmin@hlfv1" \
 --networkName "nveyancer-network" \
---networkVersion VERSION
-
-# Regenerate the REST server
-composer-rest-server -c admin@nveyancer-network -n never -w true
+--networkVersion 0.0.3a
 ```
+
+If you want to, you can turn off the REST server then turn it on again using the same parameters.
