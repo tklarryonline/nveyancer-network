@@ -85,3 +85,6 @@ typings/
 # Composer files
 *.bna
 *.card
+
+# Composer deploy
+*.pem
