@@ -99,3 +99,18 @@ composer network upgrade \
 ```
 
 If you want to, you can turn off the REST server then turn it on again using the same parameters.
+
+
+## Deployment
+
+We will use IBM Cloud to deploy. For now, just follow this [tutorial](https://hackernoon.com/deploy-a-business-network-on-free-ibm-blockchain-starter-plan-93fafb3dd997).
+
+The commands below are pasted from said tutorial to be input into the terminal.
+
+```sh
+# Step 6
+# Create admin business network card
+composer card create \
+--file dist/ibm_admin.card
+-
+```

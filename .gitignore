@@ -88,3 +88,4 @@ typings/
 
 # Composer deploy
 *.pem
+dist/connection-profile.json
